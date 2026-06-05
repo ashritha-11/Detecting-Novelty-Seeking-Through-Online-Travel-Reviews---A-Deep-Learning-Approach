@@ -3,7 +3,6 @@
 # =========================
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
 
 # =========================
@@ -30,7 +29,7 @@ dist/
 *.swp
 
 # =========================
-# Jupyter / Colab
+# Jupyter
 # =========================
 .ipynb_checkpoints/
 
@@ -47,7 +46,7 @@ output.log
 .env.*
 
 # =========================
-# Model Files (IMPORTANT)
+# Models
 # =========================
 *.pt
 *.pth
@@ -57,9 +56,6 @@ output.log
 *.bin
 *.onnx
 
-# =========================
-# Large ML Artifacts
-# =========================
 models/
 checkpoints/
 saved_model/
@@ -67,21 +63,17 @@ artifacts/
 weights/
 
 # =========================
-# Dataset Files
+# Datasets
 # =========================
 data/
 datasets/
 downloads/
 
 # =========================
-# Cache Files
+# Cache
 # =========================
 .cache/
 .pytest_cache/
-
-# =========================
-# Hugging Face
-# =========================
 .huggingface/
 transformers_cache/
 
@@ -91,7 +83,7 @@ transformers_cache/
 .vercel/
 
 # =========================
-# Operating System Files
+# System Files
 # =========================
 .DS_Store
 Thumbs.db
