@@ -1,23 +1,97 @@
-# Development Environment
-.venv/
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# =========================
+# Virtual Environments
+# =========================
 venv/
+.venv/
 ENV/
 env/
-dist/
+
+# =========================
+# Build Files
+# =========================
 build/
+dist/
 *.egg-info/
-__pycache__/
-*.pyc
+.eggs/
 
-# Project Specific
-.sfdx/
+# =========================
+# IDE Files
+# =========================
+.vscode/
+.idea/
+*.swp
+
+# =========================
+# Jupyter / Colab
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Logs
+# =========================
+*.log
 output.log
-data/processed/
-models/bert_bigru_model.pt
 
-# System files
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+
+# =========================
+# Model Files (IMPORTANT)
+# =========================
+*.pt
+*.pth
+*.h5
+*.keras
+*.ckpt
+*.bin
+*.onnx
+
+# =========================
+# Large ML Artifacts
+# =========================
+models/
+checkpoints/
+saved_model/
+artifacts/
+weights/
+
+# =========================
+# Dataset Files
+# =========================
+data/
+datasets/
+downloads/
+
+# =========================
+# Cache Files
+# =========================
+.cache/
+.pytest_cache/
+
+# =========================
+# Hugging Face
+# =========================
+.huggingface/
+transformers_cache/
+
+# =========================
+# Vercel
+# =========================
+.vercel/
+
+# =========================
+# Operating System Files
+# =========================
 .DS_Store
 Thumbs.db
-
-# Vercel
-.vercel
