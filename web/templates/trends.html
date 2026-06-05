@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row mb-5 mt-4">
+  <div class="col-md-12 text-center">
+    <h2 class="fw-bold"><i class="fa-solid fa-chart-line text-primary me-2"></i> Trends & Deep Learning Insights</h2>
+    <p class="text-muted">Analyzing novelty patterns and sentiment distribution across our dataset using BERT-based insights.</p>
+  </div>
+</div>
+
+<!-- Graphs Section -->
+<div class="row mb-5">
+  <div class="col-md-6 mb-4">
+    <div class="glass-card h-100">
+      <h5 class="mb-4 text-center">Novelty Profile Distribution</h5>
+      <canvas id="noveltyChart"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6 mb-4">
+    <div class="glass-card h-100">
+      <h5 class="mb-4 text-center">Average Rating by Profile</h5>
+      <canvas id="ratingChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-5">
+  <div class="col-md-8 mb-4">
+    <div class="glass-card">
+      <h5 class="mb-4"><i class="fa-solid fa-fire text-danger me-2"></i> Trending Locations</h5>
+      <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Place</th>
+              <th>City</th>
+              <th>Reviews</th>
+              <th>Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for x in items %}
+              <tr>
+                <td><a href="{{ url_for('place_detail', place_id=x.place_id, city=x.city) }}" class="text-decoration-none text-light fw-500">{{ x.place_name }}</a></td>
+                <td>{{ x.city }}</td>
+                <td><span class="badge bg-primary">{{ x.recent_reviews }}</span></td>
+                <td><i class="fa-solid fa-star text-warning me-1"></i> {{ "%.1f"|format(x.avg_rating) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="glass-card h-100">
+      <h5 class="mb-4 text-center">Top Countries</h5>
+      <canvas id="countryChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Deep Learning Metrics (Mocked for Demo) -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="glass-card bg-gradient-dark">
+            <h4 class="mb-4 text-center"><i class="fa-solid fa-microchip text-info me-2"></i> Deep Learning Model Performance</h4>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h2 class="text-primary fw-bold">92.4%</h2>
+                    <p class="text-muted">Model Accuracy</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-success fw-bold">0.89</h2>
+                    <p class="text-muted">F1 Score</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-info fw-bold">BERT</h2>
+                    <p class="text-muted">Backbone Architecture</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="text-warning fw-bold">30K+</h2>
+                    <p class="text-muted">Training Samples</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stats = {{ stats | tojson }};
+    
+    // Novelty Distribution Chart
+    new Chart(document.getElementById('noveltyChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(stats.novelty_dist),
+            datasets: [{
+                data: Object.values(stats.novelty_dist),
+                backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#EF4444'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#8b949e' } }
+            }
+        }
+    });
+
+    // Rating Chart
+    new Chart(document.getElementById('ratingChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(stats.avg_ratings),
+            datasets: [{
+                label: 'Avg Rating',
+                data: Object.values(stats.avg_ratings),
+                backgroundColor: 'rgba(79, 70, 229, 0.6)',
+                borderColor: '#4F46E5',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: 5, ticks: { color: '#8b949e' } },
+                x: { ticks: { color: '#8b949e' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Country Chart
+    new Chart(document.getElementById('countryChart'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(stats.top_countries),
+            datasets: [{
+                data: Object.values(stats.top_countries),
+                backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#8b949e' } }
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.table-dark {
+    --bs-table-bg: transparent;
+    --bs-table-color: #f0f6fc;
+}
+.fw-500 { font-weight: 500; }
+</style>
+{% endblock %}

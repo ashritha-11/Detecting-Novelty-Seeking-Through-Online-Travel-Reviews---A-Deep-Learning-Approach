@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row mb-5 mt-4">
+  <div class="col-md-12 text-center">
+    <h2 class="fw-bold"><i class="fa-solid fa-tags text-primary me-2"></i> Explore Novelty Profiles</h2>
+    <p class="text-muted">Discover places based on your psychological travel intent.</p>
+  </div>
+</div>
+
+<div class="row">
+  {% for n in types %}
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="glass-card h-100 text-center genre-card">
+        <div class="genre-icon mb-3">
+          {% if n == 'experience' %}
+            <i class="fa-solid fa-earth-americas fa-3x text-info"></i>
+          {% elif n == 'arousal' %}
+            <i class="fa-solid fa-bolt fa-3x text-warning"></i>
+          {% elif n == 'relaxation' %}
+            <i class="fa-solid fa-spa fa-3x text-success"></i>
+          {% elif n == 'boredom alleviation' %}
+            <i class="fa-solid fa-shuffle fa-3x text-danger"></i>
+          {% endif %}
+        </div>
+        <h4 class="fw-bold text-uppercase mb-3">{{ n }}</h4>
+        <p class="text-muted small mb-4">
+          {% if n == 'experience' %}
+            Seeking authentic, cultural, and historical immersion.
+          {% elif n == 'arousal' %}
+            Looking for thrills, adventure, and high-energy excitement.
+          {% elif n == 'relaxation' %}
+            Quiet, peaceful places to unwind and recharge.
+          {% elif n == 'boredom alleviation' %}
+            A change of pace to escape the daily routine.
+          {% endif %}
+        </p>
+        <a href="{{ url_for('novelty_page', novelty=n) }}" class="btn btn-primary w-100">Explore {{ n | capitalize }}</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+.genre-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+}
+.genre-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--primary);
+}
+.genre-icon {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+{% endblock %}

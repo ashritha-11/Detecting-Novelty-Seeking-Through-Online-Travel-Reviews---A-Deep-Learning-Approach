@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row mb-5 mt-4">
+  <div class="col-md-8 offset-md-2">
+    <div class="glass-card text-center">
+      <h2><i class="fa-solid fa-compass text-primary me-2"></i> Discover Your Novelty-Seeking Places</h2>
+      <p class="text-muted mb-4">Tell us what you are looking for, and we'll classify your intent into our 4 core novelty profiles: <strong>Experience</strong>, <strong>Arousal</strong>, <strong>Relaxation</strong>, or <strong>Boredom Alleviation</strong>.</p>
+      <form method="POST" class="mb-3">
+        <textarea name="prompt" class="form-control mb-3" rows="3" placeholder="I want to go somewhere peaceful and quiet to unwind..." required></textarea>
+        <button type="submit" class="btn btn-primary w-100 btn-lg"><i class="fa-solid fa-wand-magic-sparkles me-2"></i> Detect Intent & Find Places</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if result %}
+<div class="row mb-5">
+  <div class="col-md-10 offset-md-1">
+    <div class="glass-card">
+      <h4 class="mb-4 text-center">
+        Intent Detected: <span class="text-primary text-uppercase">{{ result.novelty_type }}</span>
+      </h4>
+      {% if result.places %}
+        <div class="list-group">
+          {% for place in result.places %}
+            <a href="{{ url_for('place_detail', place_id=place.place_id, city=place.city) }}" class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="mb-1 fw-bold">{{ place.place_name }}</h5>
+                  <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> {{ place.city }}, {{ place.country }}</small>
+                </div>
+                <span class="badge"><i class="fa-solid fa-star text-warning me-1"></i> {{ place.avg_rating | round(1) }} ({{ place.review_count }} reviews)</span>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-center text-muted">No places found for this novelty type.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="row mb-5">
+  <div class="col-md-12">
+    <h4 class="mb-4"><i class="fa-solid fa-fire text-danger me-2"></i> Top Trending Places</h4>
+    <div class="row">
+      {% for place in top_places %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a href="{{ url_for('place_detail', place_id=place.place_id, city=place.city) }}" class="text-decoration-none">
+                <div class="glass-card h-100 p-3">
+                    <h5 class="fw-bold">{{ place.place_name }}</h5>
+                    <p class="text-muted mb-2"><i class="fa-solid fa-location-dot me-1"></i> {{ place.city }}, {{ place.country }}</p>
+                    <span class="badge"><i class="fa-solid fa-star text-warning me-1"></i> {{ place.avg_rating | round(1) }}</span>
+                    <small class="text-muted ms-2">{{ place.review_count }} reviews</small>
+                </div>
+            </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

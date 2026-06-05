@@ -1,0 +1,15 @@
+{
+  "title": "Detecting Novelty Seeking From Online Travel Reviews: A Deep Learning Approach",
+  "publication": {
+    "journal": "IEEE Access",
+    "volume": "11",
+    "pages": "43869-43881",
+    "date": "2023-03-06",
+    "eissn": "2169-3536",
+    "doi": "10.1109/ACCESS.2023.3253040",
+    "publisher": "IEEE",
+    "funding_agency": ""
+  },
+  "abstract": "Travel online reviews is important experience related information for understanding an inherent personality trait, novelty seeking (NS), which influences tourism motivation and the choice of tourism destinations. Manual classification of these reviews is challenging due to their high volume and unstructured nature. This paper aims to develop a classification framework and deep learning model to overcome these limitations. A multi-dimensional classification framework was created for NS personality trait that includes four dimensions synthesized from prior literature: relaxation seeking, experience seeking, arousal seeking and boredom alleviation. Based on 30,000 reviews from TripAdvisor we propose a deep learning model using Bidirectional Encoder Representations from Transformers (BERT) - Bidirectional Gated Recurrent Unit (BiGRU) to recognize NS automatically from the reviews. The classifier based on BERT-BiGRU and NS multi-dimensional scales achieved precision and F1 scores of 93.4% and 93.3% respectively, showing that NS personality trait can be relatively accurately recognized. This study also demonstrates that the classifier based on multi-dimensional NS scales can produce satisfactory results using the deep learning model. The findings also indicate that the BERT-BiGRU model achieves the best effect compared to the same kind of deep learning models. Moreover, it proves that personality traits can be automatically identified from travel reviews based on computational techniques. For practical purposes, this study provides a comprehensive classification framework for NS, which can be used in marketing and recommendation systems operating in the tourism industry.",
+  "framework": "The framework of novelty seeking recognition model based on deep learning comprises BERT for contextual encoding, BiGRU for bidirectional sequence modeling, temporal pooling, and a classification layer aligned with four NS dimensions: relaxation seeking, experience seeking, arousal seeking, boredom alleviation."
+}

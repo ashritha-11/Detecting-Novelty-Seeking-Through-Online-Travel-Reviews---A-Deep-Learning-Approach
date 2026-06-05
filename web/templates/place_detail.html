@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row mt-4 mb-5">
+  <div class="col-md-12">
+    <div class="glass-card">
+      <div class="row">
+        <div class="col-md-5">
+           <div class="d-flex justify-content-between align-items-start mb-3">
+               <div>
+                   <h2 class="fw-bold mb-1">{{ info.place_name }}</h2>
+                   <p class="text-muted fs-5"><i class="fa-solid fa-location-dot me-2 text-danger"></i>{{ info.city }}, {{ info.country }}</p>
+               </div>
+               
+               <div class="overall-rating-badge ms-3">
+                   <div class="score">{{ info.avg_rating | round(1) }}</div>
+                   <div class="label">Overall Rating</div>
+               </div>
+           </div>
+           
+           <hr class="my-4">
+           
+           <h4 class="mb-4"><i class="fa-solid fa-comments text-primary me-2"></i> Top Reviews</h4>
+           {% if reviews %}
+             <div class="reviews-container" style="max-height: 420px; overflow-y: auto; padding-right: 12px;">
+               {% for r in reviews %}
+                 <div class="review-card p-3 mb-3" style="background: rgba(255,255,255,0.03); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0;">
+                   <p class="mb-3 fs-6" style="color: var(--text-main); font-weight: 300; line-height: 1.6; font-style: italic;">"{{ r.review_text }}"</p>
+                   <div class="d-flex justify-content-between align-items-center">
+                     <div class="text-warning fs-6">
+                       {% for i in range(r.rating | int) %}<i class="fa-solid fa-star"></i>{% endfor %}
+                     </div>
+                     <span class="badge bg-dark border border-secondary text-light"><i class="fa-regular fa-user me-1"></i> {{ r.reviewer }}</span>
+                   </div>
+                 </div>
+               {% endfor %}
+             </div>
+           {% else %}
+             <p class="text-muted">No reviews available for this location.</p>
+           {% endif %}
+        </div>
+        
+        <div class="col-md-7">
+           <h4 class="mb-3"><i class="fa-solid fa-map-location-dot text-primary me-2"></i> Location & Live Distance</h4>
+           <div id="distance-info">
+              <i class="fa-solid fa-route me-2"></i> Calculating distance from your location...
+           </div>
+           <div id="map"></div>
+           <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                   // Ensure we fall back gracefully if lat/lon somehow missing
+                   const destLat = {{ info.lat if info.lat else 48.8566 }};
+                   const destLon = {{ info.lon if info.lon else 2.3522 }};
+                   const destName = "{{ info.place_name | escape }}";
+                   
+                   // Initialize map at destination
+                   const map = L.map('map').setView([destLat, destLon], 13);
+                   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                   }).addTo(map);
+                   
+                   const destMarker = L.marker([destLat, destLon]).addTo(map)
+                        .bindPopup(`<b>${destName}</b><br>Destination`).openPopup();
+                        
+                   // Get User Location
+                   if ("geolocation" in navigator) {
+                       navigator.geolocation.watchPosition((position) => {
+                           const userLat = position.coords.latitude;
+                           const userLon = position.coords.longitude;
+                           
+                           // Update UI
+                           const distInfo = document.getElementById("distance-info");
+                           distInfo.style.display = "block";
+                           
+                           // Basic Haversine distance
+                           const R = 6371; // km
+                           const dLat = (destLat - userLat) * Math.PI / 180;
+                           const dLon = (destLon - userLon) * Math.PI / 180;
+                           const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                                     Math.cos(userLat * Math.PI / 180) * Math.cos(destLat * Math.PI / 180) *
+                                     Math.sin(dLon/2) * Math.sin(dLon/2);
+                           const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                           const d = R * c;
+                           
+                           distInfo.innerHTML = `<i class="fa-solid fa-route me-2"></i> Distance to destination: <strong>${d.toFixed(1)} km</strong>`;
+                           
+                           // Add user marker
+                           if (window.userMarker) {
+                               map.removeLayer(window.userMarker);
+                           }
+                           
+                           // Using a custom divIcon for the user
+                           const userIcon = L.divIcon({
+                               className: 'custom-user-icon',
+                               html: '<div style="background-color: #4F46E5; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);"></div>',
+                               iconSize: [20, 20],
+                               iconAnchor: [10, 10]
+                           });
+                           
+                           window.userMarker = L.marker([userLat, userLon], {icon: userIcon})
+                               .addTo(map).bindPopup("Your Current Location");
+                           
+                           if (window.routeControl) {
+                               map.removeControl(window.routeControl);
+                           }
+                           
+                           // Add routing
+                           try {
+                               window.routeControl = L.Routing.control({
+                                   waypoints: [
+                                       L.latLng(userLat, userLon),
+                                       L.latLng(destLat, destLon)
+                                   ],
+                                   router: L.Routing.osrmv1({
+                                       language: 'en',
+                                       profile: 'driving'
+                                   }),
+                                   lineOptions: {
+                                       styles: [{color: '#4F46E5', opacity: 0.8, weight: 5}]
+                                   },
+                                   show: false,
+                                   addWaypoints: false,
+                                   routeWhileDragging: false,
+                                   fitSelectedRoutes: true,
+                                   createMarker: function() { return null; } // don't create default markers for routing waypoints
+                               }).addTo(map);
+                           } catch (e) {
+                               console.log("Routing error, falling back to simple polyline", e);
+                               L.polyline([[userLat, userLon], [destLat, destLon]], {color: '#4F46E5', weight: 4, dashArray: '10, 10'}).addTo(map);
+                               map.fitBounds([[userLat, userLon], [destLat, destLon]], {padding: [50, 50]});
+                           }
+                           
+                       }, (error) => {
+                           console.error("Error getting location: ", error);
+                           document.getElementById("distance-info").innerHTML = `<i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Location access denied or unavailable.`;
+                           document.getElementById("distance-info").style.display = "block";
+                       }, {
+                           enableHighAccuracy: true
+                       });
+                   } else {
+                       document.getElementById("distance-info").innerHTML = `Geolocation is not supported by your browser.`;
+                       document.getElementById("distance-info").style.display = "block";
+                   }
+                });
+           </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

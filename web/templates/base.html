@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Novelty-Seeking Places</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+  </head>
+  <body class="{% if current_user %}logged-in{% endif %}">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Novelty Places</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('genres') }}">Genres</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('trends') }}">Trends</a></li>
+            {% if current_user %}
+              <li class="nav-item"><span class="nav-link">{{ current_user.name }}</span></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+    
+    {% if current_user %}
+    <script>
+      const backgrounds = [
+        "/static/images/d1.jpeg", "/static/images/d2.jpeg", "/static/images/d3.jpeg", 
+        "/static/images/d4.jpeg", "/static/images/d5.jpeg", "/static/images/d6.jpeg",
+        "/static/images/d7.jpeg", "/static/images/d8.jpeg", "/static/images/d9.jpeg",
+        "/static/images/d10.jpeg", "/static/images/d11.jpeg", "/static/images/d12.jpeg"
+      ];
+      let currentIdx = 0;
+      function rotateBackground() {
+        currentIdx = (currentIdx + 1) % backgrounds.length;
+        const nextImg = backgrounds[currentIdx];
+        
+        // Preload image
+        const img = new Image();
+        img.onload = () => {
+          document.body.style.backgroundImage = `linear-gradient(rgba(13, 17, 23, 0.75), rgba(13, 17, 23, 0.75)), url('${nextImg}')`;
+        };
+        img.src = nextImg;
+      }
+      setInterval(rotateBackground, 7000); // Change every 7 seconds for a calmer feel
+    </script>
+    {% endif %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  </body>
+</html>

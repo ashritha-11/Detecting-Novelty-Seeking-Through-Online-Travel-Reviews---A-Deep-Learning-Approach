@@ -1,0 +1,23 @@
+# Development Environment
+.venv/
+venv/
+ENV/
+env/
+dist/
+build/
+*.egg-info/
+__pycache__/
+*.pyc
+
+# Project Specific
+.sfdx/
+output.log
+data/processed/
+models/bert_bigru_model.pt
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel

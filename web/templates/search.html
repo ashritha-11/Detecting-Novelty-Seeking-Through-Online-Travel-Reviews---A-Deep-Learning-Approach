@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Search Results for "{{ q }}"</h2>
+
+{% if items %}
+  <div class="list-group">
+    {% for place in items %}
+      <a href="{{ url_for('place_detail', place_id=place.place_id, city=place.city) }}" class="list-group-item list-group-item-action">
+        <strong>{{ place.place_name }}</strong> — {{ place.city }}, {{ place.country }}
+        <span class="badge bg-secondary float-end">{{ place.avg_rating | round(1) }}⭐ ({{ place.review_count }} reviews)</span>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No matching places found.</p>
+{% endif %}
+{% endblock %}

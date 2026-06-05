@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero mb-4">
+  <h1 class="display-6">Country Map</h1>
+  <p>Enter a country to view related places and track your location live</p>
+</div>
+
+<div class="card shadow-sm mb-3">
+  <div class="card-body">
+    <form method="get" action="{{ url_for('country') }}">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-6">
+          <label for="country" class="form-label">Country</label>
+          <input id="country" name="country" type="text" class="form-control" value="{{ country or '' }}" placeholder="e.g., India, France">
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary w-100">Show Map</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if country and places %}
+<div class="card shadow-sm mb-3">
+  <div class="card-body">
+    <div id="map" style="height: 520px;"></div>
+  </div>
+</div>
+
+<div class="card shadow-sm mt-3">
+  <div class="card-body">
+    <h5>Places in {{ country }}</h5>
+    <ul class="list-group">
+      {% for p in places %}
+      <li class="list-group-item">
+        <a href="{{ url_for('place_detail', place_id=p.place_id, city=p.city) }}">{{ p.place_name }}</a>
+        <small class="text-muted">{{ p.city }}</small>
+        <span class="badge bg-secondary">{{ "%.2f"|format(p.avg_rating) }} ⭐</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const places = {{ places|tojson }};
+  const map = L.map('map').setView([20,0], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+
+  const markers = [];
+  places.forEach(p => {
+    if(p.lat && p.lon){
+      const m = L.marker([p.lat,p.lon]).addTo(map);
+      m.bindPopup(`<b>${p.place_name}</b><br>${p.city}<br>${(p.avg_rating||0).toFixed(2)} ⭐`);
+      markers.push(m);
+    }
+  });
+  if(markers.length) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.2));
+
+  if(navigator.geolocation){
+    navigator.geolocation.watchPosition(pos => {
+      const {latitude, longitude} = pos.coords;
+      L.circleMarker([latitude, longitude], {radius:6, color:'blue'}).addTo(map).bindPopup("You are here");
+    });
+  }
+});
+</script>
+{% endif %}
+{% endblock %}
