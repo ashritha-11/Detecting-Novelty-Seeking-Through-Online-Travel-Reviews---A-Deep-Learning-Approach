@@ -43,7 +43,7 @@ saved_model/
 artifacts/
 weights/
 
-# Large datasets
+# Data
 data/
 datasets/
 downloads/
