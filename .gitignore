@@ -1,13 +1,22 @@
+# =========================
 # Python
+# =========================
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
 
-# Virtual Environment
+# =========================
+# Virtual Environments
+# =========================
 venv/
 .venv/
 env/
+ENV/
 
-# Models
+# =========================
+# Machine Learning Models
+# =========================
 *.pt
 *.pth
 *.h5
@@ -20,31 +29,61 @@ models/
 checkpoints/
 weights/
 
-# Datasets
+# =========================
+# Datasets / Large Data
+# =========================
 data/
 datasets/
 downloads/
 
-# HuggingFace
+# =========================
+# Hugging Face Cache
+# =========================
 .cache/
 .huggingface/
 transformers_cache/
+hf_cache/
 
-# Build
+# =========================
+# Build / Packaging
+# =========================
 build/
 dist/
 *.egg-info/
+*.whl
 
-# IDE
+# =========================
+# IDE / Editors
+# =========================
 .vscode/
 .idea/
+*.swp
+*.swo
 
+# =========================
 # Logs
+# =========================
 *.log
+logs/
 
+# =========================
 # Vercel
+# =========================
 .vercel/
 
-# OS
+# =========================
+# OS Files
+# =========================
 .DS_Store
 Thumbs.db
+
+# =========================
+# Jupyter Notebook Checkpoints
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
