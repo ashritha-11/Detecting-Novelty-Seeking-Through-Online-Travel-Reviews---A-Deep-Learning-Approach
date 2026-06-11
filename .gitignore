@@ -1,34 +1,24 @@
-# Python
 __pycache__/
 *.py[cod]
 *.so
 
-# Virtual Environment
 venv/
 .venv/
-ENV/
 env/
+ENV/
 
-# Build
 build/
 dist/
 *.egg-info/
-.eggs/
 
-# IDE
 .vscode/
 .idea/
-*.swp
 
-# Logs
 *.log
-output.log
 
-# Environment Variables
 .env
 .env.*
 
-# Models
 *.pt
 *.pth
 *.h5
@@ -43,20 +33,16 @@ saved_model/
 artifacts/
 weights/
 
-# Data
 data/
 datasets/
 downloads/
 
-# Cache
 .cache/
 .pytest_cache/
 .huggingface/
 transformers_cache/
 
-# Deployment
 .vercel/
 
-# OS
 .DS_Store
 Thumbs.db
