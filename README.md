@@ -49,7 +49,7 @@ The application is configured to run on **port 5010** to avoid common port confl
 ```bash
 python web/app.py
 ```
-Visit `http://127.0.0.1:5010/register` in your browser to begin.
+Visit `http://127.0.0.1:5010/register` in your browser to begin
 
 ## 📊 Project Structure
 - `web/`: Contains the Flask application, templates, and static assets (CSS/JS/Images).
