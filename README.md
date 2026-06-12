@@ -1,7 +1,7 @@
 # 🧭 Novelty-Seeking Recognition & Travel Recommendation
 
 ## 📌 Project Overview
-This project is a deep-learning-powered web application designed to identify **Novelty-Seeking** personality traits from travel reviews and user prompts. By leveraging a hybrid **BERT + BiGRU** architecture, the system classifies travel intent into four psychological profiles, helping users discover destinations that match their current state of mind.
+This project is a deep-learning-powered web application designed to identify **Novelty-Seeking** personality traits from travel reviews and user prompts. By leveraging a hybrid **BERT + BiGRU** architecture, the system classifies travel intent into four psychological profiles, helping users discover destinations that match their current state of mind
 
 ## ✨ Key Features
 - **Intelligent Intent Detection**: Uses a fine-tuned BERT-BiGRU model to analyze user text and classify it into core novelty profiles.
